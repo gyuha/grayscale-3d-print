@@ -1,0 +1,33 @@
+version: '3'
+
+tasks:
+  install:
+    desc: Install dependencies
+    cmds:
+      - npm install
+
+  dev:
+    desc: Dev server (accessible from other hosts, 0.0.0.0)
+    cmds:
+      - npx vite --host 0.0.0.0 --port {{.PORT | default "5173"}}
+
+  test:
+    desc: Run unit tests
+    cmds:
+      - npm test
+
+  build:
+    desc: Static build (dist/)
+    cmds:
+      - npm run build
+
+  preview:
+    desc: Serve the build output (accessible from other hosts)
+    deps: [build]
+    cmds:
+      - npx vite preview --host 0.0.0.0 --port {{.PORT | default "4173"}}
+
+  sample:
+    desc: Generate samples/sample.3mf (7-step gradient)
+    cmds:
+      - npm run sample
