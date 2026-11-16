@@ -1,6 +1,6 @@
 * { box-sizing: border-box; }
 body { margin: 0; font-family: system-ui, -apple-system, sans-serif; background: #f3f4f6; color: #111; }
-.app { display: grid; grid-template-columns: 340px 1fr; height: 100vh; }
+.app { display: grid; grid-template-columns: 340px 1fr; height: 100vh; height: 100dvh; }
 .panel { overflow-y: auto; padding: 16px 18px; background: #fff; border-right: 1px solid #ddd; }
 .panel h1 { font-size: 18px; margin: 0 0 12px; }
 .panel h2 { font-size: 13px; margin: 18px 0 6px; color: #555; text-transform: uppercase; letter-spacing: .04em; }
@@ -26,3 +26,17 @@ body { margin: 0; font-family: system-ui, -apple-system, sans-serif; background:
 .row3d { min-height: 0; border-radius: 6px; overflow: hidden; }
 .viewer { width: 100%; height: 100%; }
 .empty { color: #777; align-self: center; text-align: center; grid-row: 1 / -1; }
+
+@media (max-width: 768px) {
+  .app { display: flex; flex-direction: column; height: auto; min-height: 100dvh; }
+  .previews { order: -1; grid-template-rows: 130px 55vh; padding: 8px; }
+  .row2d { gap: 6px; }
+  .panel { overflow-y: visible; border-right: 0; border-top: 1px solid #ddd; padding: 14px 14px calc(16px + env(safe-area-inset-bottom)); }
+  .field { grid-template-columns: 90px 1fr 70px auto; }
+  .field input[type=number] { width: 70px; font-size: 16px; } /* 16px: prevents iOS focus-zoom */
+  .field input[type=range] { min-width: 0; height: 28px; }
+  .field.check { grid-template-columns: auto 1fr; }
+  .field input[type=checkbox] { width: 20px; height: 20px; }
+  .download { padding: 14px; font-size: 16px; }
+  .empty { padding: 32px 0; }
+}
