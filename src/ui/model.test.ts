@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest'
-import { toneGray, toneRgba, grayRgba, summarize, maxCornerRadius, DEFAULT_PARAMS } from './model'
+import { toneGray, toneRgba, grayRgba, summarize, maxCornerRadius, defaultColors, regionRgba, regionCounts, DEFAULT_PARAMS } from './model'
 import { processImage } from '../core/pipeline'
 
 describe('toneGray: step → linear black→white display grey', () => {
@@ -58,5 +58,21 @@ describe('masked cells are transparent in previews', () => {
   })
   test('maxCornerRadius = half the shorter side in mm', () => {
     expect(maxCornerRadius(250, 900, 0.2)).toBe(25)
+  })
+})
+
+describe('filament colors', () => {
+  test('defaults per filament count', () => {
+    expect(defaultColors(1)).toEqual(['#ffffff'])
+    expect(defaultColors(2)).toEqual(['#000000', '#ffffff'])
+    expect(defaultColors(3)).toEqual(['#000000', '#ffffff', '#f0a8b4'])
+    expect(defaultColors(4)).toEqual(['#000000', '#ffffff', '#f0a8b4', '#3050e0'])
+  })
+  test('regionRgba paints each cell in its palette color; masked cells are transparent', () => {
+    const px = regionRgba(new Uint8Array([1, 0, 1]), ['#000000', '#f0a8b4'], new Uint8Array([1, 1, 0]))
+    expect(Array.from(px)).toEqual([240, 168, 180, 255, 0, 0, 0, 255, 240, 168, 180, 0])
+  })
+  test('regionCounts counts the unmasked cells of each color', () => {
+    expect(regionCounts(new Uint8Array([1, 0, 1, 2, 2]), new Uint8Array([1, 1, 0, 1, 1]), 4)).toEqual([1, 1, 2, 0])
   })
 })
