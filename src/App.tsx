@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import './app.css'
 import { processImage, type PipelineParams } from './core/pipeline'
 import { processRegionImage, type RegionPart } from './core/colorRegions'
@@ -112,7 +112,7 @@ export function App() {
       <aside className="panel">
         <h1>Grayscale 3D Print</h1>
 
-        <h2>1. 필라멘트</h2>
+        <h2><span className="step" aria-hidden="true">1</span>필라멘트</h2>
         <label className="field colors-count">
           <span>필라멘트 개수</span>
           <select value={colors.length} onChange={(e) => setColorCount(Number(e.target.value))}>
@@ -133,7 +133,7 @@ export function App() {
             : '슬롯 1 색의 베이스 위에, 이미지의 각 부분을 가장 가까운 색으로 올립니다. 밝기는 높이 단계로 표현합니다.'}
         </p>
 
-        <h2>2. 이미지</h2>
+        <h2><span className="step" aria-hidden="true">2</span>이미지</h2>
         <div
           className={`drop ${drag ? 'over' : ''}`}
           onDragOver={(e) => { e.preventDefault(); setDrag(true) }}
@@ -144,13 +144,13 @@ export function App() {
           <p>이미지를 끌어다 놓거나 선택하세요</p>
         </div>
 
-        <h2>3. 옵션</h2>
+        <h2><span className="step" aria-hidden="true">3</span>옵션</h2>
         <h3>톤 단계</h3>
         <Num label="단계 수 N" value={params.steps} min={MIN_STEPS} max={MAX_STEPS} step={1} onChange={(v) => set('steps', v)} />
         <Num label="단계당 레이어 m" value={params.layers.layersPerStep} min={1} max={5} step={1} onChange={(v) => setLay('layersPerStep', v)} />
         <div className="swatches">
           {Array.from({ length: params.steps }, (_, k) => (
-            <span key={k} style={{ background: `rgb(${toneGray(k, params.steps)},${toneGray(k, params.steps)},${toneGray(k, params.steps)})` }}>{k * params.layers.layersPerStep}</span>
+            <span key={k} style={{ '--tone': `rgb(${toneGray(k, params.steps)},${toneGray(k, params.steps)},${toneGray(k, params.steps)})` } as CSSProperties}>{k * params.layers.layersPerStep}</span>
           ))}
         </div>
 
